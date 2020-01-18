@@ -1,0 +1,21 @@
+name: C++ CI with CMake
+
+on: [push]
+
+jobs:
+  build-debug-tests:
+    runs-on: ${{ matrix.os}}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+    steps:
+    - uses: actions/checkout@v1
+    - name: configure
+      shell: bash
+      run: mkdir build && cd build && cmake -DCMAKE_BUILD_TYPE=Debug ..
+    - name: build
+      shell: bash
+      run: cd build && cmake --build . --config Debug
+    - name: test
+      shell: bash
+      run: cd build && ctest --build-config Debug
